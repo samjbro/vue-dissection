@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 describe('Component', () => {
-  it('static', () => {
+  fit('static', () => {
     const vm = new Vue({
       template: '<test></test>',
       components: {

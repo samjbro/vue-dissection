@@ -1,1 +1,3 @@
-export function noop (a?: any, b?: any, c?: any) {}
+export function toString (val) {
+  return String(val)
+}

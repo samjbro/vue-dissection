@@ -1,15 +1,13 @@
-/* @flow */
-
-import Vue from './runtime'
+import Vue from './runtime/index'
+import { compileToFunctions } from './compiler/index'
 
 const mount = Vue.prototype.$mount
-Vue.prototype.$mount = function (
-  el?: string | Element,
-  hydrating?: boolean
-): Component {
-  console.log({entryRuntimeWithCompilerEL: el})
-
-  return mount.call(this, el, hydrating)
+Vue.prototype.$mount = function (el) {
+  const options = this.$options
+  const template = el.outerHTML
+  const { render } = compileToFunctions(template)
+  options.render = render
+  return mount.call(this, el)
 }
 
 export default Vue

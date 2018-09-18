@@ -1,8 +1,12 @@
-import Vue from 'core'
+import Vue from 'core/index'
 import { mountComponent } from 'core/instance/lifecycle'
 
-Vue.prototype.$mount = function (el) {
-  return mountComponent(this, el)
+import { patch } from './patch'
+
+Vue.prototype.__patch__ = patch
+
+Vue.prototype.$mount = function () {
+  return mountComponent(this)
 }
 
 export default Vue

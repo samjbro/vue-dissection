@@ -1,7 +1,9 @@
 var alias = require('../../scripts/alias')
+var webpack = require('webpack')
+
 var webpackConfig = {
   resolve: {
-    alias
+    alias: alias
   },
   module: {
     rules: [
@@ -11,20 +13,41 @@ var webpackConfig = {
         exclude: /node_modules/
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      __WEEX__: false,
+      'process.env': {
+        NODE_ENV: '"development"',
+        TRANSITION_DURATION: process.env.CI ? 100 : 50,
+        TRANSITION_BUFFER: 10
+      }
+    })
+  ],
+  devtool: '#inline-source-map'
 }
 
+// shared config for all unit tests
 module.exports = {
+  browserConsoleLogOptions: {
+    terminal: true,
+    level: ""
+  },
   frameworks: ['jasmine'],
   files: [
     './index.js'
   ],
-  webpack: webpackConfig,
   preprocessors: {
-    './index.js': ['webpack']
+    './index.js': ['webpack', 'sourcemap']
+  },
+  webpack: webpackConfig,
+  webpackMiddleware: {
+    noInfo: true
   },
   plugins: [
     'karma-jasmine',
+    'karma-mocha-reporter',
+    'karma-sourcemap-loader',
     'karma-webpack'
   ]
 }
